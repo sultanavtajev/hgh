@@ -111,3 +111,85 @@ Følg disse trinnene for å sette opp prosjektet ditt:
     Åpne nettleseren din og naviger til [http://localhost:3000](http://localhost:3000) for å se appen din.
 
 Nå kan du begynne å utvikle din Next.js-applikasjon!
+
+18. **Initialisering av Supabase i Next.js**
+Trinn 1: Sett opp Supabase-konto og prosjekt
+- Gå til [Supabase.io](https://supabase.io/) og opprett en konto.
+- Opprett et nytt prosjekt i Supabase.
+- Kopier `API URL` og `anon public key` fra Supabase-dashbordet ditt.
+
+Trinn 2: Installer Supabase-klienten
+For å bruke Supabase med Next.js, installer Supabase-klienten:
+
+```bash
+npm install @supabase/supabase-js
+```
+
+Trinn 3: Konfigurer miljøvariabler
+Opprett en `.env.local`-fil i rotkatalogen på prosjektet ditt og legg til følgende:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=<din-supabase-url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<din-supabase-anon-key>
+```
+
+> Bytt ut `<din-supabase-url>` og `<din-supabase-anon-key>` med dine faktiske Supabase-prosjektopplysninger.
+
+Trinn 4: Initialiser Supabase-klienten
+Opprett en ny fil, for eksempel `lib/supabaseClient.js`, og initialiser Supabase:
+
+```javascript
+// lib/supabaseClient.js
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+```
+
+Trinn 5: Bruke Supabase i Next.js-komponenter
+Nå kan du bruke Supabase til å samhandle med databasen din eller autentiseringssystemet. Eksempel for å logge inn en bruker:
+
+```javascript
+import { supabase } from '../lib/supabaseClient';
+
+const Login = () => {
+  const handleLogin = async (email, password) => {
+    const { user, error } = await supabase.auth.signIn({
+      email,
+      password,
+    });
+
+    if (error) console.error('Login error:', error.message);
+    else console.log('Logged in user:', user);
+  };
+
+  return (
+    <div>
+      <input type="email" placeholder="Email" id="email" />
+      <input type="password" placeholder="Password" id="password" />
+      <button
+        onClick={() =>
+          handleLogin(
+            document.getElementById('email').value,
+            document.getElementById('password').value
+          )
+        }
+      >
+        Logg inn
+      </button>
+    </div>
+  );
+};
+
+export default Login;
+```
+
+Trinn 6: Distribusjon
+Når prosjektet er klart, kan du distribuere det til Vercel:
+1. Gå til Vercel-dashbordet ditt.
+2. Opprett et nytt prosjekt og koble til Git-repositoriet ditt.
+3. Legg til miljøvariablene (`NEXT_PUBLIC_SUPABASE_URL` og `NEXT_PUBLIC_SUPABASE_ANON_KEY`) til Vercel under "Settings" -> "Environment Variables"-seksjonen.
+4. Distribuer prosjektet ditt.
+

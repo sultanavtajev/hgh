@@ -27,14 +27,14 @@ export default function Component() {
                 </div>
               </div>
             </div>
-            <Image
+            {/* <Image
               src="/images/image1.jpg"
               width="550"
               height="550"
               alt="Hero"
               className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
               priority
-            />
+            /> */}
           </div>
         </div>
       </section>
